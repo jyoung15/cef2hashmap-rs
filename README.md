@@ -1,4 +1,8 @@
 # CEF to HashMap
+[![macOS](https://github.com/marirs/cef2hashmap-rs/actions/workflows/macos.yml/badge.svg)](https://github.com/marirs/cef2hashmap-rs/actions/workflows/macos.yml)
+[![Linux Arm7](https://github.com/marirs/cef2hashmap-rs/actions/workflows/linux_arm.yml/badge.svg)](https://github.com/marirs/cef2hashmap-rs/actions/workflows/linux_arm.yml)
+[![Linux x86_64](https://github.com/marirs/cef2hashmap-rs/actions/workflows/linux_x86_64.yml/badge.svg)](https://github.com/marirs/cef2hashmap-rs/actions/workflows/linux_x86_64.yml)
+[![Windows](https://github.com/marirs/cef2hashmap-rs/actions/workflows/windows.yml/badge.svg)](https://github.com/marirs/cef2hashmap-rs/actions/workflows/windows.yml)
 
 Convert a syslog CEF string or a regular CEF string to a HashMap object.
 
