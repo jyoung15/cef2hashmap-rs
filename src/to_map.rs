@@ -22,6 +22,25 @@ lazy_static! {
     .unwrap();
     static ref CEF_EXT: Regex =
         Regex::new(r"[ ]?(?P<key>[^= ]+?)=(?P<value>[^=]*?)(?=(?:[ ][^= ]*?=|$))").unwrap();
+    static ref TEMPLATES: HashMap<&'static str, &'static str> = {
+        include_str!("../assets/template_keys.txt")
+            .lines()
+            .map(|s| s.split_at(s.find(":").unwrap()))
+            .map(|(key, val)| {
+                (
+                    key.trim(),
+                    val[1..].split(',').map(|s| s.trim()).collect::<Vec<_>>(),
+                )
+            })
+            .collect::<HashMap<&str, Vec<&str>>>()
+            .iter()
+            .flat_map(|(key, val)| {
+                val.iter()
+                    .map(|v| (*v, *key))
+                    .collect::<HashMap<&str, &str>>()
+            })
+            .collect()
+    };
 }
 
 pub trait CefToHashMap {
@@ -57,34 +76,29 @@ fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> 
         header.remove("pri");
         let facility = (pri >> 3).to_string();
         let priority = (pri & 7).to_string();
-        header.insert("facility".to_string(), facility);
-        header.insert("priority".to_string(), priority);
+        header.insert("syslogFacility".to_string(), facility);
+        header.insert("syslogPriority".to_string(), priority);
     }
     // Keep the raw log cef str
     if keep_raw {
         header.insert("rawEvent".to_string(), cef_str.trim().to_string());
     }
 
-    Ok(header)
+    Ok(apply_template(header))
 }
 
 /// Gets the CEF Header as well as the CEF_Extension in hashmap
 fn get_cef_as_kv(cef_str: &str) -> HashMap<String, String> {
     let caps = CEF.captures(cef_str).unwrap();
-    CEF
-        .capture_names()
+    CEF.capture_names()
         .flatten()
         .filter_map(|n| {
             Some((
                 n.trim().to_string(),
-                caps.as_ref()?
-                    .name(n)?
-                    .as_str()
-                    .trim()
-                    .to_string(),
+                caps.as_ref()?.name(n)?.as_str().trim().to_string(),
             ))
         })
-        .filter(|(_, v)|!v.is_empty())
+        .filter(|(_, v)| !v.is_empty())
         .collect()
 }
 
@@ -105,4 +119,19 @@ fn get_cef_ext_as_kv(cef_ext: &str) -> HashMap<String, String> {
                 .collect::<HashMap<String, String>>()
         })
         .collect()
+}
+
+fn apply_template(map: HashMap<String, String>) -> HashMap<String, String> {
+    let mut res = HashMap::new();
+    for (key, val) in &map {
+        match TEMPLATES.get(&key.as_str()) {
+            Some(k) => {
+                res.insert(k.to_string(), val.clone());
+            }
+            None => {
+                res.insert(key.clone(), val.clone());
+            }
+        }
+    }
+    res
 }

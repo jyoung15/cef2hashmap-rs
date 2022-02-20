@@ -69,6 +69,8 @@ sourceNADAddress: EndpointNADAddress
 sourcePolicyId: EndPointPolicyID
 sourceOUI: EndpointOUI
 unixTerminal: tty
+syslogFacility: syslog_facility
+syslogPriority: syslog_priority, syslog_pri
 commandExecuted: cmd, sudocmd
 accountingSessionId: Acct-Session-Id
 accountingStatusType: Acct-Status-Type
