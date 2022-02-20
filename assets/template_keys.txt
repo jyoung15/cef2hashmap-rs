@@ -1,14 +1,5 @@
 eventReceivedTime: event_received_time, ert
 agentReceivedTime: at
-createdTimeEpoch: CreateTime
-updatedTimeEpoch: UpdateTime
-firstCollectionEpoch: FirstCollection
-lastNmapScanTimeEpoch: LastNmapScanTime
-nmapScanCount: NmapScanCount
-nmapSubnetScanId: NmapSubnetScanID
-timeToProfile: TimeToProfile
-portalUser: PortalUser
-byodRegistration: BYODRegistration
 agentAddress: agent, agt
 agentHostName: ahost, agenthost, agent_host, agenthostname, agent_hostname
 eventEndTime: end, et, event-time, evtTime, event_time, Timestamp
@@ -21,25 +12,6 @@ sourcePort: src_port, sport, s_port, source_port, spt, rhost
 sourceUserPrivileges: spriv
 sourcePID: spid
 sourceUID: suid
-sourceGroupName: src_gname, src_groupname, src_group_name
-sourceGID: src_gid, sgid
-sourceServiceName: src_service, src_svc, source_svc
-sourceExecutedCommand: src_cmd, rcmd, scmd, source_cmd, srcCmd
-sourcePath: rpath, pwd, cwd, src_pwd, src_cwd
-sourceEvent: EndpointSourceEvent
-sourceUserAgent: EndpointUserAgent
-sourceIdentityGroup: EndpointIdentityGroup
-sourceMacAddress: smac, src_mac, source_mac, sourcemac, EndpointMacAddress
-sourceSSHKeyFingerPrint: keyFingerprint, ssh_key_type, sshkey, rkey, skey
-sourceAuth: sauth, src_auth
-sourceZone: src_zone, sz, szone, srcZone
-sourceNtDomain: sntdom
-sourceMatchedPolicy: EndpointMatchedPolicy
-sourcePolicy: EndpointPolicy
-sourceCertainityMetric: EndpointCertainityMetric
-sourceNADAddress: EndpointNADAddress
-sourcePolicyId: EndPointPolicyID
-sourceOUI: EndpointOUI
 destinationUserName: dest_user, duname, destination_username, destUser, dstUser, dst_user, duser, dusr, User-Name
 destinationHost: dhost, dst_host, dest_host, dest, desthost
 destinationAddress: dip, daddress, dst_address, dest_address, dst_ip, dest_ip, dst, DestinationIPAddress
@@ -72,9 +44,32 @@ filePath: fpath, filepath
 fileHash: fhash, filehash
 agentHost: loghost, ahost, agent
 message: msg, sname
+rawEvent: raw_log, rawlog, rawLog
+deviceEventCategory: cat
+eventSeverity: sev
+createdTimeEpoch: CreateTime
+updatedTimeEpoch: UpdateTime
+sourceGroupName: src_gname, src_groupname, src_group_name
+sourceGID: src_gid, sgid
+sourceServiceName: src_service, src_svc, source_svc
+sourceExecutedCommand: src_cmd, rcmd, scmd, source_cmd, srcCmd
+sourcePath: rpath, pwd, cwd, src_pwd, src_cwd
+sourceEvent: EndpointSourceEvent
+sourceUserAgent: EndpointUserAgent
+sourceIdentityGroup: EndpointIdentityGroup
+sourceMacAddress: smac, src_mac, source_mac, sourcemac, EndpointMacAddress
+sourceSSHKeyFingerPrint: keyFingerprint, ssh_key_type, sshkey, rkey, skey
+sourceAuth: sauth, src_auth
+sourceZone: src_zone, sz, szone, srcZone
+sourceNtDomain: sntdom
+sourceMatchedPolicy: EndpointMatchedPolicy
+sourcePolicy: EndpointPolicy
+sourceCertainityMetric: EndpointCertainityMetric
+sourceNADAddress: EndpointNADAddress
+sourcePolicyId: EndPointPolicyID
+sourceOUI: EndpointOUI
 unixTerminal: tty
 commandExecuted: cmd, sudocmd
-eventSeverity: sev
 accountingSessionId: Acct-Session-Id
 accountingStatusType: Acct-Status-Type
 accountingAuthentic: Acct-Authentic
@@ -103,5 +98,10 @@ configVersionId: ConfigVersionId
 feedService: FeedService
 postureApplicable: PostureApplicable
 staticGroupAssignment: StaticGroupAssignment
-rawEvent: raw_log, rawlog, rawLog
-deviceEventCategory: cat
+firstCollectionEpoch: FirstCollection
+lastNmapScanTimeEpoch: LastNmapScanTime
+nmapScanCount: NmapScanCount
+nmapSubnetScanId: NmapSubnetScanID
+timeToProfile: TimeToProfile
+portalUser: PortalUser
+byodRegistration: BYODRegistration
