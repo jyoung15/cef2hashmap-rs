@@ -23,23 +23,23 @@ lazy_static! {
 }
 
 pub trait CefToHashMap {
-    fn to_hashmap(&self) -> HashMap<String, String>;
+    fn to_hashmap(&self, keep_raw: bool) -> HashMap<String, String>;
 }
 
 impl CefToHashMap for &str {
-    fn to_hashmap(&self) -> HashMap<String, String> {
-        cef_to_map(self)
+    fn to_hashmap(&self, keep_raw: bool) -> HashMap<String, String> {
+        cef_to_map(self, keep_raw)
     }
 }
 
 impl CefToHashMap for String {
-    fn to_hashmap(&self) -> HashMap<String, String> {
-        cef_to_map(self)
+    fn to_hashmap(&self, keep_raw: bool) -> HashMap<String, String> {
+        cef_to_map(self, keep_raw)
     }
 }
 
 /// Convert the CEF String into HashMap
-fn cef_to_map(cef_str: &str) -> HashMap<String, String> {
+fn cef_to_map(cef_str: &str, keep_raw: bool) -> HashMap<String, String> {
     let mut header = get_cef_header(cef_str);
     if header.contains_key("cef_ext") {
         let extension = get_cef_ext(header.get("cef_ext").unwrap());
@@ -54,6 +54,9 @@ fn cef_to_map(cef_str: &str) -> HashMap<String, String> {
         let priority = (pri & 7).to_string();
         header.insert("facility".to_string(), facility);
         header.insert("priority".to_string(), priority);
+    }
+    if keep_raw {
+        header.insert("rawEvent".to_string(), cef_str.to_string());
     }
     header
 }
