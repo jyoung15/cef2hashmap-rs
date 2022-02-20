@@ -1,21 +1,25 @@
 use crate::{Error, Result};
+use datetime_parse::DateTimeFixedOffset;
 use fancy_regex::Regex;
 use std::collections::HashMap;
 
 lazy_static! {
     static ref CEF: Regex = Regex::new(
         &[
+            r"(?mi)",
             r"^(?:(?:<(?P<pri>\d+)>))?",
-            r"(?P<agentReceivedTime>(?:[a-z]+[ ])?",
+            r"(?P<at>(?:[a-z]+[ ])?",
             r"(?:[\d :\-T]+\b[ ]?))?",
-            r"(?P<ahost>.*)",
-            r"CEF:0(?:\|(?P<deviceVendor>.*?(?=\|)))?",
+            r"(?P<ahost>.*)?",
+            r"CEF:0",
+            r"(?:\|(?P<deviceVendor>.*?(?=\|)))?",
             r"(?:\|(?P<deviceProduct>.*?(?=\|)))?",
             r"(?:\|(?P<deviceVersion>.*?(?=\|)))?",
             r"(?:\|(?P<signatureId>.*?(?=\|)))?",
             r"(?:\|(?P<name>.*?(?=\|)))?",
             r"(?:\|(?P<severity>.*?(?=\|)))?",
-            r"\|(?P<cef_ext>.*)"
+            r"\|",
+            r"(?P<cef_ext>.*)",
         ]
         .join("")
     )
@@ -24,8 +28,9 @@ lazy_static! {
         Regex::new(r"[ ]?(?P<key>[^= ]+?)=(?P<value>[^=]*?)(?=(?:[ ][^= ]*?=|$))").unwrap();
     static ref TEMPLATES: HashMap<&'static str, &'static str> = {
         include_str!("../assets/template_keys.txt")
+            .trim()
             .lines()
-            .map(|s| s.split_at(s.find(":").unwrap()))
+            .map(|s| s.split_at(s.find(':').unwrap()))
             .map(|(key, val)| {
                 (
                     key.trim(),
@@ -41,6 +46,14 @@ lazy_static! {
             })
             .collect()
     };
+    static ref DATE_FIELDS: Vec<&'static str> = vec![
+        "managerReceivedTime",
+        "eventReceivedTime",
+        "agentReceivedTime",
+        "eventEndTime",
+        "eventStartTime",
+        "deviceReceivedTime"
+    ];
 }
 
 pub trait CefToHashMap {
@@ -95,7 +108,7 @@ fn get_cef_as_kv(cef_str: &str) -> HashMap<String, String> {
         .filter_map(|n| {
             Some((
                 n.trim().to_string(),
-                caps.as_ref()?.name(n)?.as_str().trim().to_string(),
+                caps.as_ref().unwrap().name(n)?.as_str().trim().to_string(),
             ))
         })
         .filter(|(_, v)| !v.is_empty())
@@ -123,15 +136,38 @@ fn get_cef_ext_as_kv(cef_ext: &str) -> HashMap<String, String> {
 
 fn apply_template(map: HashMap<String, String>) -> HashMap<String, String> {
     let mut res = HashMap::new();
+    let mut elems = vec![];
+
+    // Standardise the Keys to unified keys based on template_keys.txt
     for (key, val) in &map {
         match TEMPLATES.get(&key.as_str()) {
             Some(k) => {
                 res.insert(k.to_string(), val.clone());
+
+                // Standardise the Date/Time fields
+                if DATE_FIELDS.contains(k) {
+                    if let Ok(parsed) = val.parse::<DateTimeFixedOffset>() {
+                        *res.get_mut(&*k.to_string()).unwrap() = format!("{}", parsed.0)
+                    }
+                }
             }
             None => {
                 res.insert(key.clone(), val.clone());
             }
         }
+
+        // Convert the Labels as Keys and the Label Values as Values to the Label Keys
+        if key.ends_with("Label") && res.contains_key(&key[..key.len() - 5]) {
+            elems.push(key[..key.len() - 5].to_string());
+        }
     }
+
+    // Convert the Labels as Keys and the Label Values as Values to the Label Keys
+    for e in elems {
+        let (_, key) = res.remove_entry(&format!("{}Label", e)).unwrap();
+        let (_, value) = res.remove_entry(&e).unwrap();
+        res.insert(key.replace(' ', ""), value);
+    }
+
     res
 }

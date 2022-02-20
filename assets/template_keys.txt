@@ -1,5 +1,6 @@
 eventReceivedTime: event_received_time, ert
 agentReceivedTime: at
+managerReceivedTime: mrt
 agentAddress: agent, agt
 agentHostName: ahost, agenthost, agent_host, agenthostname, agent_hostname
 eventEndTime: end, et, event-time, evtTime, event_time, Timestamp
