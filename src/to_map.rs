@@ -68,7 +68,7 @@ fn get_cef_header(cef_str: &str) -> HashMap<String, String> {
         .collect()
 }
 
-/// Extracts the CEF_Extension and returns all the key=value pairs into HashMap
+/// Extracts all the key=value pairs into HashMap from the CEF_Extension
 fn get_cef_ext(cef_ext: &str) -> HashMap<String, String> {
     CEF_EXT
         .captures_iter(cef_ext)
