@@ -1,5 +1,6 @@
 use fancy_regex::Regex;
 use std::collections::HashMap;
+use crate::{Result, Error};
 
 lazy_static! {
     static ref CEF_HEADER: Regex = Regex::new(
@@ -23,23 +24,26 @@ lazy_static! {
 }
 
 pub trait CefToHashMap {
-    fn to_hashmap(&self, keep_raw: bool) -> HashMap<String, String>;
+    fn to_hashmap(&self, keep_raw: bool) -> Result<HashMap<String, String>>;
 }
 
 impl CefToHashMap for &str {
-    fn to_hashmap(&self, keep_raw: bool) -> HashMap<String, String> {
+    fn to_hashmap(&self, keep_raw: bool) -> Result<HashMap<String, String>> {
         cef_to_map(self, keep_raw)
     }
 }
 
 impl CefToHashMap for String {
-    fn to_hashmap(&self, keep_raw: bool) -> HashMap<String, String> {
+    fn to_hashmap(&self, keep_raw: bool) -> Result<HashMap<String, String>> {
         cef_to_map(self, keep_raw)
     }
 }
 
 /// Convert the CEF String into HashMap
-fn cef_to_map(cef_str: &str, keep_raw: bool) -> HashMap<String, String> {
+fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> {
+    if !cef_str.to_lowercase().contains("cef:0|") {
+        return Err(Error::NotCef)
+    }
     let mut header = get_cef_header(cef_str);
     if header.contains_key("cef_ext") {
         let extension = get_cef_ext(header.get("cef_ext").unwrap());
@@ -58,7 +62,8 @@ fn cef_to_map(cef_str: &str, keep_raw: bool) -> HashMap<String, String> {
     if keep_raw {
         header.insert("rawEvent".to_string(), cef_str.to_string());
     }
-    header
+
+    Ok(header)
 }
 
 /// Gets the CEF Header as well as the CEF_Extension in hashmap
