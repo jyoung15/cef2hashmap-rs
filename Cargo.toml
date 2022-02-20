@@ -1,15 +1,10 @@
 [package]
 name = "cef2hashmap"
-description = "A Simple CEF Parser to a Standardised HashMap"
+description = "A Simple CEF Parser to a HashMap"
 version = "0.1.0"
 authors = ["Marirs <marirs@gmail.com>"]
 include = ["src", "assets"]
 edition = "2021"
-
-[dependencies]
-datetime_parse = "0.0.1-beta.7"
-fancy-regex = "0.7.1"
-lazy_static = "1.4.0"
 
 [profile.dev]
 opt-level = 3
