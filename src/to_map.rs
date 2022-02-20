@@ -56,7 +56,23 @@ lazy_static! {
     ];
 }
 
+/// A Simple CEF Parser to a Standardised HashMap
 pub trait CefToHashMap {
+    /// Converts a CEF &str or String into a Standardised HashMap.
+    /// Also accepts syslog strings.
+    /// ###
+    /// Example CEF Strings:
+    /// - <134>2022-02-14T03:17:30-08:00 TEST CEF:0|Vendor|Product|20.0.560|600|User Signed In|3|src=127.0.0.1 suser=Admin
+    /// - <134>Feb 14 19:04:54 CEF:0|Vendor|Product|20.0.560|600|User Signed In|3|src=127.0.0.1
+    /// - CEF:0|Vendor|Product|20.0.560|600|User Signed In|3|src=127.0.0.1 suser=Admin
+    /// ###
+    /// ## Example Usage:
+    /// ```rust
+    /// use cef2hashmap::CefToHashMap;
+    ///
+    /// let cef_str = "CEF:0|Vendor|Product|20.0.560|600|User Signed In|3|src=127.0.0.1 suser=Admin";
+    /// assert!(cef_str.to_hashmap(true).is_ok())
+    /// ```
     fn to_hashmap(&self, keep_raw: bool) -> Result<HashMap<String, String>>;
 }
 
@@ -92,6 +108,7 @@ fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> 
         header.insert("syslogFacility".to_string(), facility);
         header.insert("syslogPriority".to_string(), priority);
     }
+
     // Keep the raw log cef str
     if keep_raw {
         header.insert("rawEvent".to_string(), cef_str.trim().to_string());
