@@ -1,6 +1,6 @@
+use crate::{Error, Result};
 use fancy_regex::Regex;
 use std::collections::HashMap;
-use crate::{Result, Error};
 
 lazy_static! {
     static ref CEF_HEADER: Regex = Regex::new(
@@ -42,11 +42,11 @@ impl CefToHashMap for String {
 /// Convert the CEF String into HashMap
 fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> {
     if !cef_str.to_lowercase().contains("cef:0|") {
-        return Err(Error::NotCef)
+        return Err(Error::NotCef);
     }
     let mut header = get_cef_header(cef_str);
     if header.contains_key("cef_ext") {
-        let extension = get_cef_ext(header.get("cef_ext").unwrap());
+        let extension = get_cef_ext_as_kv(header.get("cef_ext").unwrap());
         header.remove("cef_ext");
         header.extend(extension)
     }
@@ -59,8 +59,18 @@ fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> 
         header.insert("facility".to_string(), facility);
         header.insert("priority".to_string(), priority);
     }
+    // check if agent recieved time is there
+    if header.contains_key("date") {
+        header.insert(
+            "agentReceivedTime".to_string(),
+            header.get("date").unwrap().to_owned(),
+        );
+        header.remove("date");
+    }
+
+    // Keep the raw log cef str
     if keep_raw {
-        header.insert("rawEvent".to_string(), cef_str.to_string());
+        header.insert("rawEvent".to_string(), cef_str.trim().to_string());
     }
 
     Ok(header)
@@ -72,12 +82,23 @@ fn get_cef_header(cef_str: &str) -> HashMap<String, String> {
     CEF_HEADER
         .capture_names()
         .flatten()
-        .filter_map(|n| Some((n.to_string(), caps.as_ref().unwrap().name(n).unwrap().as_str().to_string())))
+        .filter_map(|n| {
+            Some((
+                n.trim().to_string(),
+                caps.as_ref()
+                    .unwrap()
+                    .name(n)
+                    .unwrap()
+                    .as_str()
+                    .trim()
+                    .to_string(),
+            ))
+        })
         .collect()
 }
 
 /// Extracts all the key=value pairs into HashMap from the CEF_Extension
-fn get_cef_ext(cef_ext: &str) -> HashMap<String, String> {
+fn get_cef_ext_as_kv(cef_ext: &str) -> HashMap<String, String> {
     CEF_EXT
         .captures_iter(cef_ext)
         .flat_map(|c| {
@@ -88,7 +109,7 @@ fn get_cef_ext(cef_ext: &str) -> HashMap<String, String> {
                         .filter(|s| s.contains('='))
                         .collect::<Vec<_>>()
                 })
-                .map(|s|s.split_at(s.find('=').unwrap()))
+                .map(|s| s.split_at(s.find('=').unwrap()))
                 .map(|(k, v)| (k.trim().to_string(), v[1..].trim().to_string()))
                 .collect::<HashMap<String, String>>()
         })
