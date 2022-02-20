@@ -45,7 +45,7 @@ fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> 
     if !cef_str.to_lowercase().contains("cef:0|") {
         return Err(Error::NotCef);
     }
-    let mut header = get_cef_header(cef_str);
+    let mut header = get_cef_as_kv(cef_str);
     if header.contains_key("cef_ext") {
         let extension = get_cef_ext_as_kv(header.get("cef_ext").unwrap());
         header.remove("cef_ext");
@@ -69,7 +69,7 @@ fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> 
 }
 
 /// Gets the CEF Header as well as the CEF_Extension in hashmap
-fn get_cef_header(cef_str: &str) -> HashMap<String, String> {
+fn get_cef_as_kv(cef_str: &str) -> HashMap<String, String> {
     let caps = CEF.captures(cef_str).unwrap();
     CEF
         .capture_names()
