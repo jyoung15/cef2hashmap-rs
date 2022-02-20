@@ -6,8 +6,9 @@ lazy_static! {
     static ref CEF_HEADER: Regex = Regex::new(
         &[
             r"^(?:(?:<(?P<pri>\d+)>))?",
-            r"(?P<date>(?:[a-z]+[ ])?",
-            r"(?:[\d :\-T]+\b[ ]?))?.*?",
+            r"(?P<agentReceivedTime>(?:[a-z]+[ ])?",
+            r"(?:[\d :\-T]+\b[ ]?))?",
+            r"(?P<ahost>.*)",
             r"CEF:0(?:\|(?P<deviceVendor>.*?(?=\|)))?",
             r"(?:\|(?P<deviceProduct>.*?(?=\|)))?",
             r"(?:\|(?P<deviceVersion>.*?(?=\|)))?",
@@ -59,15 +60,6 @@ fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> 
         header.insert("facility".to_string(), facility);
         header.insert("priority".to_string(), priority);
     }
-    // check if agent recieved time is there
-    if header.contains_key("date") {
-        header.insert(
-            "agentReceivedTime".to_string(),
-            header.get("date").unwrap().to_owned(),
-        );
-        header.remove("date");
-    }
-
     // Keep the raw log cef str
     if keep_raw {
         header.insert("rawEvent".to_string(), cef_str.trim().to_string());
@@ -85,15 +77,14 @@ fn get_cef_header(cef_str: &str) -> HashMap<String, String> {
         .filter_map(|n| {
             Some((
                 n.trim().to_string(),
-                caps.as_ref()
-                    .unwrap()
-                    .name(n)
-                    .unwrap()
+                caps.as_ref()?
+                    .name(n)?
                     .as_str()
                     .trim()
                     .to_string(),
             ))
         })
+        .filter(|(_, v)|!v.is_empty())
         .collect()
 }
 
