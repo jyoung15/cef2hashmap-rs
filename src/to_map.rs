@@ -3,7 +3,7 @@ use fancy_regex::Regex;
 use std::collections::HashMap;
 
 lazy_static! {
-    static ref CEF_HEADER: Regex = Regex::new(
+    static ref CEF: Regex = Regex::new(
         &[
             r"^(?:(?:<(?P<pri>\d+)>))?",
             r"(?P<agentReceivedTime>(?:[a-z]+[ ])?",
@@ -70,8 +70,8 @@ fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> 
 
 /// Gets the CEF Header as well as the CEF_Extension in hashmap
 fn get_cef_header(cef_str: &str) -> HashMap<String, String> {
-    let caps = CEF_HEADER.captures(cef_str).unwrap();
-    CEF_HEADER
+    let caps = CEF.captures(cef_str).unwrap();
+    CEF
         .capture_names()
         .flatten()
         .filter_map(|n| {
