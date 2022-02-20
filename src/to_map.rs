@@ -37,23 +37,23 @@ pub trait CefToHashMap {
     /// let cef_str = "CEF:0|Vendor|Product|20.0.560|600|User Signed In|3|src=127.0.0.1 suser=Admin";
     /// assert!(cef_str.to_hashmap(true).is_ok())
     /// ```
-    fn to_hashmap(&self, keep_raw: bool) -> Result<HashMap<String, String>>;
+    fn to_hashmap(&self, preserve_orig: bool) -> Result<HashMap<String, String>>;
 }
 
 impl CefToHashMap for &str {
-    fn to_hashmap(&self, keep_raw: bool) -> Result<HashMap<String, String>> {
-        cef_to_map(self, keep_raw)
+    fn to_hashmap(&self, preserve_orig: bool) -> Result<HashMap<String, String>> {
+        cef_to_map(self, preserve_orig)
     }
 }
 
 impl CefToHashMap for String {
-    fn to_hashmap(&self, keep_raw: bool) -> Result<HashMap<String, String>> {
-        cef_to_map(self, keep_raw)
+    fn to_hashmap(&self, preserve_orig: bool) -> Result<HashMap<String, String>> {
+        cef_to_map(self, preserve_orig)
     }
 }
 
 /// Convert the CEF String into HashMap
-fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> {
+fn cef_to_map(cef_str: &str, preserve_orig: bool) -> Result<HashMap<String, String>> {
     // get the initial parsed struct
     let parsed = parse_cef_line(cef_str)?;
     let mut map = parsed.cef_header;
@@ -78,8 +78,8 @@ fn cef_to_map(cef_str: &str, keep_raw: bool) -> Result<HashMap<String, String>> 
         // get the cef extension
         map.extend(parse_cef_ext(&parsed.cef_ext));
     }
-    if keep_raw {
-        // Keep the raw log cef str
+    if preserve_orig {
+        // Preserve the raw log cef str
         map.insert("rawEvent".to_string(), cef_str.trim().to_string());
     }
 
