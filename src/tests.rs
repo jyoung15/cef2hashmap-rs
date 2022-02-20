@@ -93,7 +93,8 @@ fn test_only_datetime() {
 
 #[test]
 fn test_only_human_datetime() {
-    let s = "<134>Feb 14 19:04:54 CEF:0|Vendor|Product|20.0.560|600|User Signed In|3|src=127.0.0.1 ";
+    let s =
+        "<134>Feb 14 19:04:54 CEF:0|Vendor|Product|20.0.560|600|User Signed In|3|src=127.0.0.1 ";
     let x = s.to_hashmap(false);
     assert!(x.is_ok());
     let x = x.unwrap();
@@ -122,7 +123,6 @@ fn test_ipv4_and_human_datetime() {
     assert_eq!(x.get("ahost").unwrap(), "127.0.0.1");
     assert!(x.get("at").is_some());
 }
-
 
 #[test]
 fn test_ipv6_and_datetime() {
@@ -155,7 +155,10 @@ fn test_ipv6_and_human_datetime() {
     let x = x.unwrap();
     println!("{:?}", x);
     assert!(x.get("ahost").is_some());
-    assert_eq!(x.get("ahost").unwrap(), "2001:db8:3333:4444:5555:6666:7777:8888");
+    assert_eq!(
+        x.get("ahost").unwrap(),
+        "2001:db8:3333:4444:5555:6666:7777:8888"
+    );
     assert!(x.get("at").is_some());
 }
 
@@ -200,7 +203,10 @@ fn test_only_ipv6() {
     let x = x.unwrap();
     println!("{:?}", x);
     assert!(x.get("ahost").is_some());
-    assert_eq!(x.get("ahost").unwrap(), "2001:db8:3333:4444:5555:6666:7777:8888");
+    assert_eq!(
+        x.get("ahost").unwrap(),
+        "2001:db8:3333:4444:5555:6666:7777:8888"
+    );
     assert!(x.get("at").is_none());
 }
 

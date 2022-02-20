@@ -153,11 +153,14 @@ fn parse_cef_line(s: &str) -> Result<CefLine> {
         // more than 1 space- taking for granted that it could be
         // a human readable datetime string & may/not be hostname
         if data.matches(' ').count().eq(&1) {
-            let x = data.rsplitn(2, ' ').filter(|&x| !x.is_empty()).collect::<Vec<_>>();
+            let x = data
+                .rsplitn(2, ' ')
+                .filter(|&x| !x.is_empty())
+                .collect::<Vec<_>>();
             if x.len().eq(&2) {
                 // we have hostname & date
-                res.ahost = x.first().map(|x|x.to_string());
-                res.at = x.last().map(|x|x.to_string());
+                res.ahost = x.first().map(|x| x.to_string());
+                res.at = x.last().map(|x| x.to_string());
             } else if x.len().eq(&1) {
                 // Malformed Syslog - We either have a host or datetime
                 let ss = x.first().unwrap();
@@ -173,9 +176,12 @@ fn parse_cef_line(s: &str) -> Result<CefLine> {
             res.at = Some(data.to_string())
         } else if data.matches(' ').count().gt(&2) {
             // assuming that this could be a human datetime string + host
-            let x = data.rsplitn(2, ' ').filter(|&x| !x.is_empty()).collect::<Vec<_>>();
-            res.ahost = x.first().map(|x|x.to_string());
-            res.at = x.last().map(|x|x.to_string());
+            let x = data
+                .rsplitn(2, ' ')
+                .filter(|&x| !x.is_empty())
+                .collect::<Vec<_>>();
+            res.ahost = x.first().map(|x| x.to_string());
+            res.at = x.last().map(|x| x.to_string());
         } else if data.matches(' ').count().eq(&0) {
             // need to check if its datetime/hostname
             if is_datetime_str(data) {
@@ -193,9 +199,7 @@ fn parse_cef_line(s: &str) -> Result<CefLine> {
 fn parse_cef_ext(s: &str) -> HashMap<String, String> {
     let mut map = HashMap::new();
 
-    let split_by_equalto = s
-        .split('=')
-        .collect::<Vec<&str>>();
+    let split_by_equalto = s.split('=').collect::<Vec<&str>>();
     let mut key = "".to_string();
     // go over to take before the last as last is the key
     for s in split_by_equalto.windows(2) {
