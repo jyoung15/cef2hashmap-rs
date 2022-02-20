@@ -1,0 +1,107 @@
+eventReceivedTime: event_received_time, ert
+agentReceivedTime: at
+createdTimeEpoch: CreateTime
+updatedTimeEpoch: UpdateTime
+firstCollectionEpoch: FirstCollection
+lastNmapScanTimeEpoch: LastNmapScanTime
+nmapScanCount: NmapScanCount
+nmapSubnetScanId: NmapSubnetScanID
+timeToProfile: TimeToProfile
+portalUser: PortalUser
+byodRegistration: BYODRegistration
+agentAddress: agent, agt
+agentHostName: ahost, agenthost, agent_host, agenthostname, agent_hostname
+eventEndTime: end, et, event-time, evtTime, event_time, Timestamp
+eventStartTime: startTime, start, start_time, st
+eventCount: cnt
+sourceUserName: src_user, suname, source_username, srcUser, ruser, suser
+sourceHost: shost, src_host, source_host, source, srchost, rhost, host-name
+sourceAddress: sip, saddress, raddress, src_address, source_address, src_ip, source_ip, src, EndpointIPAddress
+sourcePort: src_port, sport, s_port, source_port, spt, rhost
+sourceUserPrivileges: spriv
+sourcePID: spid
+sourceUID: suid
+sourceGroupName: src_gname, src_groupname, src_group_name
+sourceGID: src_gid, sgid
+sourceServiceName: src_service, src_svc, source_svc
+sourceExecutedCommand: src_cmd, rcmd, scmd, source_cmd, srcCmd
+sourcePath: rpath, pwd, cwd, src_pwd, src_cwd
+sourceEvent: EndpointSourceEvent
+sourceUserAgent: EndpointUserAgent
+sourceIdentityGroup: EndpointIdentityGroup
+sourceMacAddress: smac, src_mac, source_mac, sourcemac, EndpointMacAddress
+sourceSSHKeyFingerPrint: keyFingerprint, ssh_key_type, sshkey, rkey, skey
+sourceAuth: sauth, src_auth
+sourceZone: src_zone, sz, szone, srcZone
+sourceNtDomain: sntdom
+sourceMatchedPolicy: EndpointMatchedPolicy
+sourcePolicy: EndpointPolicy
+sourceCertainityMetric: EndpointCertainityMetric
+sourceNADAddress: EndpointNADAddress
+sourcePolicyId: EndPointPolicyID
+sourceOUI: EndpointOUI
+destinationUserName: dest_user, duname, destination_username, destUser, dstUser, dst_user, duser, dusr, User-Name
+destinationHost: dhost, dst_host, dest_host, dest, desthost
+destinationAddress: dip, daddress, dst_address, dest_address, dst_ip, dest_ip, dst, DestinationIPAddress
+destinationPort: dst_port, dport, d_port, destination_port, dest_port, dpt, DestinationPort
+destinationMacAddress: dmac, dst_mac, dest_mac, destination_mac
+destinationUserPrivileges: dpriv
+destinationPID: dpid
+destinationUID: duid
+destinationGroupName: dst_gname, dst_groupname, dst_group_name
+destinationGID: dst_gid, dgid
+destinationUnixShell: dshell
+destinationAuth: dauth, dst_auth, dest_auth
+destinationServiceName: dstSrvName, dst_service, dest_service, dst_svc, dest_svc, dest_srv_name, destsrvname, dstsrvname
+destinationExecutedCommand: dst_cmd, dcmd, dest_cmd, destination_cmd, destcmd
+destinationPath: dpath, dest_pwd, dest_cwd, dst_pwd, dst_cwd
+destinationZone: dst_zone, dz, dzone, dstZone, dest_zone, destZone
+transportProtocol: proto, protocol
+deviceReceivedTime: rt
+deviceAction: act
+deviceVendor: dv, dvc_vendor, dvcVendor
+deviceAddress: dvc, DeviceIPAddress
+devicePort: DevicePort
+deviceHostName: dvchost, AAA-Server
+deviceProduct: dprod, dvc_prod, dvc_product
+deviceVersion: dver, dvc_ver, dvcVer, device_version
+deviceIdentifier: Device Identifier, DeviceIdentifier, Device-Identifier, Device_Identifier
+eventID: eventid, event_id, eid
+fileName: fname, filename
+filePath: fpath, filepath
+fileHash: fhash, filehash
+agentHost: loghost, ahost, agent
+message: msg, sname
+unixTerminal: tty
+commandExecuted: cmd, sudocmd
+eventSeverity: sev
+accountingSessionId: Acct-Session-Id
+accountingStatusType: Acct-Status-Type
+accountingAuthentic: Acct-Authentic
+accountingServiceType: Service-Type
+accountingDelayTime: Acct-Delay-Time
+aaaServer: AAA-Server, AAAServer
+framedProtocol: Framed-Protocol, FramedProtocol
+framedIpAddress: Framed-IP-Address, FramedIPAddress
+callingStationId: Calling-Station-Id, CallingStationId
+nasIpAddress: NAS-IP-Address, NASIPAddress
+nasPortId: NAS-Port-Id, NASPortId
+nasPortType: NAS-Port-Type, NASPortType
+requestAuthenticator: Request-Authenticator
+cryptPassword: Crypt-Password
+authType: Auth-Type
+execProgramWait: Exec-Program-Wait
+execProgram: Exec-Program
+fallThrough: Fall-Through
+dhcpClassIdentifier: dhcp-class-identifier, dhcpclassidentifier
+profilerServer: ProfilerServer
+policyVersion: PolicyVersion
+identityGroupId: IdentityGroupID
+matchedPolicyId: MatchedPolicyID
+totalCertaintyFactor: Total Certainty Factor
+configVersionId: ConfigVersionId
+feedService: FeedService
+postureApplicable: PostureApplicable
+staticGroupAssignment: StaticGroupAssignment
+rawEvent: raw_log, rawlog, rawLog
+deviceEventCategory: cat
