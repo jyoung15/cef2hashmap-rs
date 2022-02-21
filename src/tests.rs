@@ -211,6 +211,16 @@ fn test_only_ipv6() {
 }
 
 #[test]
+fn test_equals_inside_value() {
+    let s = r"<134>CEF:0|Vendor|Product|20.0.560|600|User Signed In|3|request=https://google.com&search\=rust";
+    let x = s.to_hashmap(false);
+    assert!(x.is_ok());
+    let x = x.unwrap();
+    assert!(x.get("request").is_some());
+    assert_eq!(x.get("request").unwrap(), "https://google.com&search\\=rust");
+}
+
+#[test]
 fn test_cef_headers_exist() {
     let s = "<134>CEF:0|Vendor|Product|20.0.560|600|User Signed In|3|";
     let x = s.to_hashmap(false);
