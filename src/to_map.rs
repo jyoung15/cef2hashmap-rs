@@ -195,11 +195,26 @@ fn parse_cef_line(s: &str) -> Result<CefLine> {
     Ok(res)
 }
 
+fn split_with_escaped<'a>(s: &'a str, ch: &char) -> Vec<&'a str>{
+    let mut res = vec![];
+    let mut offset = 0;
+    for i in 0..s.len(){
+        if s.as_bytes()[i] == *ch as u8{
+            if i > 0 && s.as_bytes()[i-1] == b'\\'{
+                continue;
+            }
+            res.push(&s[offset..i]);
+            offset=i+1;
+        }
+    }
+    res.push(&s[offset..]);
+    res
+}
+
 /// Parse the CEF Extension
 fn parse_cef_ext(s: &str) -> HashMap<String, String> {
     let mut map = HashMap::new();
-
-    let split_by_equalto = s.split('=').collect::<Vec<&str>>();
+    let split_by_equalto = split_with_escaped(s, &'=');
     let mut key = "".to_string();
     // go over to take before the last as last is the key
     for s in split_by_equalto.windows(2) {
