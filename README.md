@@ -13,7 +13,7 @@ Convert a syslog CEF string or a regular CEF string to a HashMap object.
 
 ```toml
 [dependencies]
-cef2hashmap = "0.1.1"
+cef2hashmap = "0.1.3"
 ```
 
 and then
