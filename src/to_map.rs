@@ -134,7 +134,7 @@ fn parse_cef_line(s: &str) -> Result<CefLine> {
     // we mostly have syslog information
     if arr.len().eq(&2) {
         let syslog_data = arr.first().unwrap().trim();
-        let data;
+        let mut data;
         // we might have syslog facility & priority to extract
         if syslog_data.starts_with('<') && syslog_data.contains('>') {
             let pri = &syslog_data[1..syslog_data.find('>').unwrap()];
@@ -143,6 +143,10 @@ fn parse_cef_line(s: &str) -> Result<CefLine> {
                 res.syslog_priority = Some((parsed & 7).to_string());
             }
             data = &syslog_data[syslog_data.find('>').unwrap() + 1..];
+            if data.starts_with("1 ") {
+                // assuming that version is always "1" for RFC 5424
+                data = &data[2..];
+            }
         } else {
             // no syslog facility & priority
             data = syslog_data;
