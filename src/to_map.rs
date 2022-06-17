@@ -12,8 +12,9 @@ const CEF_HEADERS: [&str; 6] = [
 
 #[derive(Clone, Debug, Default)]
 struct CefLine {
-    syslog_facility: Option<String>,
     syslog_priority: Option<String>,
+    syslog_facility: Option<String>,
+    syslog_severity: Option<String>,
     at: Option<String>,
     ahost: Option<String>,
     cef_header: HashMap<String, String>,
@@ -69,6 +70,10 @@ fn cef_to_map(cef_str: &str, preserve_orig: bool) -> Result<HashMap<String, Stri
     if let Some(facility) = parsed.syslog_facility {
         // syslog facility available
         map.insert("syslog_facility".to_string(), facility);
+    }
+    if let Some(pri) = parsed.syslog_severity {
+        // syslog severity available
+        map.insert("syslog_severity".to_string(), pri);
     }
     if let Some(pri) = parsed.syslog_priority {
         // syslog priority available
@@ -140,7 +145,8 @@ fn parse_cef_line(s: &str) -> Result<CefLine> {
             let pri = &syslog_data[1..syslog_data.find('>').unwrap()];
             if let Ok(parsed) = pri.parse::<i16>() {
                 res.syslog_facility = Some((parsed >> 3).to_string());
-                res.syslog_priority = Some((parsed & 7).to_string());
+                res.syslog_severity = Some((parsed & 7).to_string());
+                res.syslog_priority = Some(pri.to_string());
             }
             data = &syslog_data[syslog_data.find('>').unwrap() + 1..];
             if data.starts_with("1 ") {
