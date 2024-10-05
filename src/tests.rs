@@ -243,7 +243,7 @@ fn test_equals_inside_value() {
     assert!(x.is_ok());
     let x = x.unwrap();
     assert!(x.get("request").is_some());
-    assert_eq!(x.get("request").unwrap(), "https://google.com&search\\=rust");
+    assert_eq!(x.get("request").unwrap(), "https://google.com&search=rust");
 }
 
 #[test]

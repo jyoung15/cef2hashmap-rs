@@ -1,5 +1,5 @@
 use crate::{Error, Result};
-use std::collections::HashMap;
+use std::{borrow::Cow, collections::HashMap};
 
 const CEF_HEADERS: [&str; 6] = [
     "deviceVendor",
@@ -205,19 +205,28 @@ fn parse_cef_line(s: &str) -> Result<CefLine> {
     Ok(res)
 }
 
-fn split_with_escaped<'a>(s: &'a str, ch: &char) -> Vec<&'a str>{
+fn unescape<'a>(s: &'a str, ch: &char) -> Cow<'a, str> {
+    let split: Vec<_> = s.split(&format!("\\{ch}")).collect();
+    if split.len() == 1 {
+        s.into()
+    } else {
+        split.join(&ch.to_string()).into()
+    }
+}
+
+fn split_with_escaped<'a>(s: &'a str, ch: &char) -> Vec<Cow<'a, str>> {
     let mut res = vec![];
     let mut offset = 0;
-    for i in 0..s.len(){
-        if s.as_bytes()[i] == *ch as u8{
-            if i > 0 && s.as_bytes()[i-1] == b'\\'{
+    for i in 0..s.len() {
+        if s.as_bytes()[i] == *ch as u8 {
+            if i > 0 && s.as_bytes()[i - 1] == b'\\' {
                 continue;
             }
-            res.push(&s[offset..i]);
-            offset=i+1;
+            res.push(unescape(&s[offset..i], ch));
+            offset = i + 1;
         }
     }
-    res.push(&s[offset..]);
+    res.push(unescape(&s[offset..], ch));
     res
 }
 
