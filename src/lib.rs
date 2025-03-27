@@ -5,5 +5,7 @@ pub use to_map::CefToHashMap;
 mod tests;
 
 mod error;
-pub use error::Error;
-pub type Result<T> = std::result::Result<T, error::Error>;
+use error::Error;
+pub type Result<T> = std::result::Result<T, Error>;
+
+mod util;

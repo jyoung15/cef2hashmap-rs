@@ -1,4 +1,6 @@
-use cef2hashmap::CefToHashMap;
+#![allow(unused_crate_dependencies, reason = "lint not needed for example")]
+
+use cef2hashmap::CefToHashMap as _;
 
 fn main() {
     let examples = include_str!("examples.txt").trim();
